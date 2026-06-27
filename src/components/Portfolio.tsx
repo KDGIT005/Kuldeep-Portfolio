@@ -220,8 +220,15 @@ export function About() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
-          className="md:col-span-2 glass rounded-3xl p-8"
+          className="md:col-span-2 glass rounded-3xl p-8 flex flex-col md:flex-row gap-8 items-start"
         >
+          <div className="w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_40px_-15px_rgba(255,255,255,0.05)]">
+            <img 
+              src="/profile.jpeg" 
+              alt="Kuldeep Dhangad" 
+              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" 
+            />
+          </div>
           <div className="text-lg leading-relaxed text-foreground/85 space-y-4">
             <p>
               I'm a developer who builds at the intersection of <span className="gradient-text font-semibold">AI, cloud, and full-stack engineering</span>.
