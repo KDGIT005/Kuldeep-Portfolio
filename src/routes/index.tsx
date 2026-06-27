@@ -1,8 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Portfolio from "@/components/Portfolio";
+import { Hero, Ticker, About, NavigationCards, Contact, SocialRail } from "@/components/Portfolio";
 
-export const Route = createFileRoute("/")({
-  component: Portfolio,
+function LandingPage() {
+  return (
+    <>
+      <div className="relative">
+        <SocialRail />
+        <Hero />
+        <Ticker />
+        <About />
+        <NavigationCards />
+      </div>
+      <Contact />
+    </>
+  );
+}
+
+export const Route = createFileRoute("/")(  {
+  component: LandingPage,
   head: () => ({
     meta: [
       { title: "Kuldeep Dhangad — AI Backend Developer & Full-Stack Engineer" },

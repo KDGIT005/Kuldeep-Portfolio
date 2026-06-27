@@ -7,8 +7,14 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import CursorTrail from "@/components/CursorTrail";
+import BootIntro from "@/components/BootIntro";
 
 function NotFoundComponent() {
   return (
@@ -111,10 +117,33 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [booted, setBooted] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const seen = sessionStorage.getItem("kd_booted");
+    if (seen) setBooted(true);
+  }, []);
+
+  const finish = () => {
+    sessionStorage.setItem("kd_booted", "1");
+    setBooted(true);
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <CursorTrail />
+      <AnimatePresence>{!booted && <BootIntro key="intro" onFinish={finish} />}</AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: booted ? 1 : 0, y: booted ? 0 : 16 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        className="min-h-screen text-foreground"
+      >
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </motion.div>
     </QueryClientProvider>
   );
 }

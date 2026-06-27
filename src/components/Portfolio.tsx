@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Download, ArrowDown, Mail, Phone, Linkedin, Github, Code2, ExternalLink, Sparkles, Cpu, Cloud, Database, Rocket, Menu, X, Send } from "lucide-react";
-import BootIntro from "./BootIntro";
-import CursorTrail from "./CursorTrail";
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
+import { Download, Mail, Phone, Linkedin, Github, Code2, ExternalLink, Sparkles, Cpu, Cloud, Send, Rocket, Database, ArrowRight } from "lucide-react";
+import SectionHeader from "./SectionHeader";
 
-const fadeUp = {
+// ── Animation Variants ──────────────────────────────────────────────
+
+export const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: (i = 0) => ({
     opacity: 1,
@@ -13,107 +15,79 @@ const fadeUp = {
   }),
 };
 
-const sectionFade = {
+export const sectionFade = {
   hidden: { opacity: 0, y: 30 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } },
 };
 
-function SectionHeader({ num, title, kicker }: { num: string; title: string; kicker?: string }) {
+function LeetCodeIcon({ className }: { className?: string }) {
   return (
-    <motion.div
-      variants={sectionFade}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
-      className="mb-14"
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
     >
-      <div className="font-mono text-xs tracking-[0.3em] uppercase text-accent mb-3">{num} — {kicker ?? title}</div>
-      <div className="flex items-end gap-6">
-        <h2 className="font-display font-bold text-4xl md:text-5xl tracking-tight">
-          {title.split(" ").map((w, i, arr) => (
-            <span key={i} className={i === arr.length - 1 ? "gradient-text" : ""}>
-              {w}{i < arr.length - 1 ? " " : ""}
-            </span>
-          ))}
-        </h2>
-        <div className="flex-1 h-px bg-gradient-to-r from-accent/40 to-transparent mb-3" />
-      </div>
-    </motion.div>
+      <path d="M14.5 4 6.5 12l8 8" />
+      <path d="M8 12h11" />
+      <path d="M14.5 8 18.5 12 14.5 16" opacity="0.55" />
+    </svg>
   );
 }
 
-function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+export function SocialRail() {
   const links = [
-    { l: "About", h: "#about" },
-    { l: "Skills", h: "#skills" },
-    { l: "Projects", h: "#projects" },
-    { l: "Experience", h: "#experience" },
-    { l: "Contact", h: "#contact" },
+    {
+      label: "LeetCode",
+      href: "https://leetcode.com/u/KULDEEP2005",
+      icon: <LeetCodeIcon className="h-4 w-4" />,
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/KDGIT005",
+      icon: <Github size={16} />,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/kuldeepdhangad/",
+      icon: <Linkedin size={16} />,
+    },
   ];
+
   return (
-    <nav className="sticky top-4 z-50 mx-auto max-w-5xl px-4">
-      <div className="glass rounded-full px-6 py-3 flex items-center justify-between shadow-[0_10px_40px_-10px_oklch(0.65_0.25_305/0.35)]">
-        <a href="#top" className="font-display font-bold text-lg">
-          <span className="gradient-text">Kuldeep</span>
-          <span className="text-foreground/60 font-mono text-xs ml-1">.dev</span>
-        </a>
-        <ul className="hidden md:flex gap-7 text-sm text-foreground/70">
-          {links.map((l) => (
-            <li key={l.l}>
-              <a href={l.h} className="hover:text-foreground transition-colors">{l.l}</a>
-            </li>
-          ))}
-        </ul>
-        <a href="#contact" className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full gradient-bg-primary text-primary-foreground text-sm font-semibold glow-purple hover:scale-105 transition-transform">
-          Let's Talk
-        </a>
-        <button
-          className="md:hidden flex items-center justify-center w-9 h-9 rounded-full glass text-foreground/80 hover:text-foreground transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-        </button>
-      </div>
-      {/* Mobile dropdown */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="md:hidden mt-2 glass rounded-2xl p-4 shadow-[0_20px_60px_-15px_oklch(0.65_0.25_305/0.4)]"
+    <motion.nav
+      aria-label="Social profile links"
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      className="absolute left-4 top-28 bottom-24 z-30 hidden xl:block pointer-events-none"
+    >
+      <div className="sticky top-28 flex flex-col items-center gap-3 pointer-events-auto">
+        <div className="h-10 w-px bg-gradient-to-b from-transparent to-accent/30" />
+        {links.map((link) => (
+          <a
+            key={link.label}
+            href={link.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={link.label}
+            title={link.label}
+            className="group flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.035] text-foreground/45 backdrop-blur-md shadow-[0_12px_36px_-18px_oklch(0.65_0.25_305/0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-accent/10 hover:text-accent hover:shadow-[0_16px_42px_-18px_oklch(0.65_0.25_305/0.7)]"
           >
-            <ul className="flex flex-col gap-1">
-              {links.map((l) => (
-                <li key={l.l}>
-                  <a
-                    href={l.h}
-                    onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-2.5 rounded-xl text-sm text-foreground/80 hover:text-foreground hover:bg-white/5 transition-all"
-                  >
-                    {l.l}
-                  </a>
-                </li>
-              ))}
-              <li>
-                <a
-                  href="#contact"
-                  onClick={() => setMobileOpen(false)}
-                  className="block mt-2 text-center px-4 py-2.5 rounded-full gradient-bg-primary text-primary-foreground text-sm font-semibold"
-                >
-                  Let's Talk
-                </a>
-              </li>
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
+            {link.icon}
+          </a>
+        ))}
+        <div className="h-16 w-px bg-gradient-to-b from-accent/30 to-transparent" />
+      </div>
+    </motion.nav>
   );
 }
+
+// ── Floating Icons ──────────────────────────────────────────────────
 
 function FloatingIcons() {
   const icons = [
@@ -138,7 +112,9 @@ function FloatingIcons() {
   );
 }
 
-function Hero() {
+// ── Hero Section ────────────────────────────────────────────────────
+
+export function Hero() {
   return (
     <section id="top" className="relative max-w-6xl mx-auto px-6 pt-20 pb-24 overflow-hidden">
       <FloatingIcons />
@@ -153,32 +129,38 @@ function Hero() {
           className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full glass font-mono text-xs"
         >
           <span className="w-2 h-2 rounded-full bg-accent pulse-dot" />
-          <span className="text-foreground/70">Available for opportunities · India</span>
+          <span className="text-foreground/70">Full-Stack Developer · AWS Certified · AI Builder</span>
         </motion.div>
 
         <motion.p variants={fadeUp} className="mt-6 text-base md:text-lg text-foreground/70 leading-relaxed max-w-2xl mx-auto font-display">
-          <span className="gradient-text font-bold text-xl md:text-2xl">Kuldeep Dhangad</span>
-          <span className="text-foreground/50 mx-2">—</span>
-          B.Tech CS student at VIT Bhopal specializing in Cloud Computing.
-          I craft full-stack platforms, AI backends, and Android apps that turn complex problems into elegant products.
+          <span
+            className="gradient-text inline-block whitespace-nowrap font-extrabold text-[1.75rem] md:text-[2.125rem] leading-tight"
+            style={{ textShadow: "0 0 26px oklch(0.65 0.25 305 / 0.32)" }}
+          >
+            Kuldeep Dhangad
+          </span>
+          <br />
+          B.Tech CS student at VIT Bhopal, specializing in Cloud Computing & Automation.<br />
+          I build full-stack platforms, AI backends, and Android apps —<br />
+          powered by Spring Boot, Gemini AI, and AWS.
         </motion.p>
 
         <motion.h1
           variants={fadeUp}
-          className="mt-4 font-display font-bold text-3xl md:text-4xl leading-[1.1] tracking-tight text-foreground/60"
+          className="mt-6 font-display font-bold text-3xl md:text-4xl leading-[1.1] tracking-tight text-foreground/60"
         >
-          Building <span className="gradient-text">AI-powered</span> systems
+          From idea to deployed product.
           <br />
-          that <span className="gradient-text">scale</span> with the cloud
+          <span className="gradient-text">In days, not months.</span>
         </motion.h1>
 
         <motion.div variants={fadeUp} className="mt-10 flex flex-wrap gap-4 justify-center">
-          <a
-            href="#projects"
+          <Link
+            to="/projects"
             className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full gradient-bg-primary text-primary-foreground font-semibold glow-purple hover:scale-105 transition-transform"
           >
-            <Sparkles size={18} /> View My Work
-          </a>
+            <Sparkles size={18} /> Explore My Work
+          </Link>
           <a
             href="/resume.pdf"
             download
@@ -190,10 +172,10 @@ function Hero() {
 
         <motion.div variants={fadeUp} className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { n: "8.03", l: "CGPA" },
-            { n: "70%", l: "Time Saved via AI" },
-            { n: "6+", l: "REST APIs" },
-            { n: "3", l: "Certifications" },
+            { n: "8.19", l: "CGPA" },
+            { n: "2×", l: "AWS Certified" },
+            { n: "6", l: "Projects Shipped" },
+            { n: "8", l: "Certifications" },
           ].map((s) => (
             <div key={s.l} className="glass rounded-2xl p-5">
               <div className="font-display text-3xl font-bold gradient-text">{s.n}</div>
@@ -206,8 +188,10 @@ function Hero() {
   );
 }
 
-function Ticker() {
-  const tech = ["Spring Boot", "React", "AWS", "Docker", "PostgreSQL", "Gemini API", "Kotlin", "Firebase", "CI/CD", "WebSocket"];
+// ── Tech Ticker ─────────────────────────────────────────────────────
+
+export function Ticker() {
+  const tech = ["Spring Boot", "React", "AWS", "Docker", "PostgreSQL", "Gemini AI", "Kotlin", "Firebase", "WebSocket", "JWT", "Next.js", "TypeScript", "MediaPipe", "scikit-learn", "CI/CD"];
   const loop = [...tech, ...tech];
   return (
     <section className="border-y border-border py-5 overflow-hidden glass">
@@ -223,7 +207,9 @@ function Ticker() {
   );
 }
 
-function About() {
+// ── About Section ───────────────────────────────────────────────────
+
+export function About() {
   return (
     <section id="about" className="max-w-6xl mx-auto px-6 py-24">
       <SectionHeader num="01" title="About Me" kicker="Who I Am" />
@@ -235,14 +221,21 @@ function About() {
           viewport={{ once: true, margin: "-80px" }}
           className="md:col-span-2 glass rounded-3xl p-8"
         >
-          <p className="text-lg leading-relaxed text-foreground/85">
-            I'm a developer who lives at the intersection of <span className="gradient-text font-semibold">AI, cloud, and full-stack engineering</span>.
-            From real-time biometric ML pipelines to JWT-secured ride-sharing platforms, I love building systems that feel inevitable —
-            fast, secure, and beautifully simple to use.
-          </p>
-          <p className="mt-5 text-foreground/70 leading-relaxed">
-            Currently exploring how Gemini, Spring Boot, and modern cloud infra can compress what used to take a team into what one developer can ship in a week.
-          </p>
+          <div className="text-lg leading-relaxed text-foreground/85 space-y-4">
+            <p>
+              I'm a developer who builds at the intersection of <span className="gradient-text font-semibold">AI, cloud, and full-stack engineering</span>.
+            </p>
+            <p>
+              Twice AWS Certified — Cloud Practitioner (865/1000) and Solutions Architect Associate (992/1000) — I don't just learn cloud, I architect with it.
+            </p>
+            <p>
+              From real-time posture detection with MediaPipe + scikit-learn, to JWT-secured ride-sharing platforms with WebSocket chat, to AI volunteer management systems powered by Gemini 3.5 Flash — I build things that feel inevitable: fast, secure, and absurdly simple to use.
+            </p>
+            <p className="text-foreground/70">
+              <span className="font-mono text-xs uppercase tracking-widest text-accent mr-2">⚙️ Currently:</span>
+              Integrating Spring AI, LangChain4j, and AWS Bedrock into production-ready backends to compress what used to take a team into what one developer can ship in a week.
+            </p>
+          </div>
         </motion.div>
         <motion.div
           variants={sectionFade}
@@ -254,9 +247,11 @@ function About() {
           <h3 className="font-mono text-xs uppercase tracking-widest text-accent mb-4">Quick Facts</h3>
           <ul className="space-y-3 text-sm text-foreground/80">
             <li>📍 VIT Bhopal, India</li>
-            <li>🎓 B.Tech CS · Cloud Computing</li>
-            <li>⚡ AI Backend · Full-Stack · Android</li>
-            <li>🚀 Open to internships & collabs</li>
+            <li>🎓 B.Tech CS · Cloud Computing & Automation (2027)</li>
+            <li>☁️ 2× AWS Certified (SAA + CCP)</li>
+            <li>⚡ Full-Stack · AI Backends · Android</li>
+            <li>🏆 Hackathon Builder — Mahakumbh Innovation Challenge</li>
+            <li className="pt-2 text-accent">🚀 Open to internships & SDE fresher roles</li>
           </ul>
         </motion.div>
       </div>
@@ -264,7 +259,87 @@ function About() {
   );
 }
 
-function Skills() {
+// ── Navigation Cards (Landing Page Hub) ─────────────────────────────
+
+const navCards = [
+  {
+    icon: "⚡",
+    title: "Technical Skills",
+    description: "Languages, frameworks, cloud & DevOps, databases, and AI/ML tools I work with.",
+    to: "/skills" as const,
+    gradient: "from-violet-500/20 to-purple-600/20",
+    iconComponent: Database,
+  },
+  {
+    icon: "🚀",
+    title: "Featured Projects",
+    description: "Full-stack platforms, AI backends, and Android apps — built to scale.",
+    to: "/projects" as const,
+    gradient: "from-pink-500/20 to-rose-600/20",
+    iconComponent: Rocket,
+  },
+  {
+    icon: "💼",
+    title: "Experience & Achievements",
+    description: "Competitions, certifications, programs, and campus leadership with real shipped outcomes.",
+    to: "/experience" as const,
+    gradient: "from-cyan-500/20 to-blue-600/20",
+    iconComponent: Code2,
+  },
+  {
+    icon: "📜",
+    title: "Certifications",
+    description: "AWS, DevOps, McKinsey — always learning, always growing.",
+    to: "/certifications" as const,
+    gradient: "from-amber-500/20 to-orange-600/20",
+    iconComponent: Sparkles,
+  },
+];
+
+export function NavigationCards() {
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-24">
+      <SectionHeader num="02" title="Explore More" kicker="Sections" />
+      <div className="grid sm:grid-cols-2 gap-6">
+        {navCards.map((card, i) => (
+          <motion.div
+            key={card.title}
+            custom={i}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-60px" }}
+          >
+            <Link
+              to={card.to}
+              className="group relative block glass rounded-3xl p-8 card-hover overflow-hidden"
+            >
+              {/* Background glow */}
+              <div
+                aria-hidden
+                className={`absolute -top-20 -right-20 w-60 h-60 rounded-full opacity-20 group-hover:opacity-40 transition-opacity duration-500 blur-3xl bg-gradient-to-br ${card.gradient}`}
+              />
+              <div className="relative">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-4xl">{card.icon}</div>
+                  <div className="w-10 h-10 rounded-full glass flex items-center justify-center text-accent group-hover:scale-110 group-hover:glow-purple transition-all duration-300">
+                    <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+                  </div>
+                </div>
+                <h3 className="font-display text-2xl font-bold mb-2 group-hover:gradient-text transition-all duration-300">{card.title}</h3>
+                <p className="text-foreground/60 text-sm leading-relaxed">{card.description}</p>
+              </div>
+            </Link>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Skills Section ──────────────────────────────────────────────────
+
+export function Skills() {
   const groups = [
     { title: "Languages", items: ["Java", "Kotlin", "Python", "JavaScript", "SQL"] },
     { title: "Frontend & Backend", items: ["React", "Vite", "Spring Boot", "Spring Security", "Spring Data JPA", "Flask", "REST APIs", "Hibernate"] },
@@ -273,7 +348,7 @@ function Skills() {
   ];
   return (
     <section id="skills" className="max-w-6xl mx-auto px-6 py-24">
-      <SectionHeader num="02" title="Technical Skills" kicker="My Stack" />
+      <SectionHeader num="01" title="Technical Skills" kicker="My Stack" />
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {groups.map((g, i) => (
           <motion.div
@@ -300,6 +375,8 @@ function Skills() {
   );
 }
 
+// ── Project Card & Projects Section ─────────────────────────────────
+
 type Project = {
   icon: string;
   title: string;
@@ -307,6 +384,8 @@ type Project = {
   tech: string[];
   desc: string;
   wins: string;
+  github?: string;
+  live?: string;
 };
 
 function ProjectCard({ p, i }: { p: Project; i: number }) {
@@ -317,14 +396,14 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-60px" }}
-      className="group relative glass rounded-3xl p-8 card-hover overflow-hidden"
+      className="group relative glass rounded-3xl p-8 card-hover overflow-hidden flex flex-col"
     >
       <div
         aria-hidden
         className="absolute -top-20 -right-20 w-60 h-60 rounded-full opacity-20 group-hover:opacity-40 transition-opacity blur-3xl"
         style={{ background: "var(--gradient-primary)" }}
       />
-      <div className="relative">
+      <div className="relative flex-1 flex flex-col">
         <div className="flex items-center justify-between mb-5">
           <div className="text-4xl">{p.icon}</div>
           <span className="font-mono text-xs px-3 py-1 rounded-full glass text-accent2">
@@ -339,37 +418,102 @@ function ProjectCard({ p, i }: { p: Project; i: number }) {
             </span>
           ))}
         </div>
-        <p className="text-foreground/75 leading-relaxed text-sm">{p.desc}</p>
+        <p className="text-foreground/75 leading-relaxed text-sm flex-1">{p.desc}</p>
         <div className="mt-5 pt-5 border-t border-border font-mono text-xs text-foreground/60">
           <span className="text-accent">✓</span> {p.wins}
         </div>
+        {/* Action Links */}
+        {(p.github || p.live) && (
+          <div className="mt-4 flex flex-wrap gap-3">
+            {p.live && (
+              <a
+                href={p.live}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full gradient-bg-primary text-primary-foreground text-xs font-semibold hover:scale-105 transition-transform"
+              >
+                <ExternalLink size={12} /> Live Demo
+              </a>
+            )}
+            {p.github && (
+              <a
+                href={p.github}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-xs text-foreground/80 hover:text-accent hover:border-accent transition-all"
+              >
+                <Github size={12} /> Source Code
+              </a>
+            )}
+          </div>
+        )}
       </div>
     </motion.div>
   );
 }
 
-function Projects() {
+export function Projects() {
   const projects: Project[] = [
     {
       icon: "🚗",
       title: "CABO",
-      badge: "↗ Live",
-      tech: ["React", "Spring Boot", "PostgreSQL", "WebSocket", "Docker", "Firebase"],
-      desc: "Full-stack college ride-sharing platform with 6+ JWT-secured REST APIs, real-time WebSocket chat (STOMP + SockJS), admin moderation with RBAC, and zero duplicate bookings. Deployed on Render + Vercel with automatic CI/CD.",
-      wins: "0% invalid join requests · Full admin moderation · Firebase Auth",
+      badge: "↗ Live · Featured",
+      tech: ["React", "Vite", "Spring Boot", "Spring Security", "PostgreSQL", "WebSocket", "STOMP", "Firebase Auth", "Docker", "Render", "Vercel"],
+      desc: "Full-stack college ride-sharing platform — users post rides they're taking, others join. Real-time WebSocket chat (STOMP + SockJS), JWT-secured REST APIs with RBAC, duplicate booking prevention, user reporting + admin moderation, and full CI/CD. Every push to main auto-redeploys frontend (Vercel) and Dockerized backend (Render).",
+      wins: "Real-time WebSocket chat · JWT + RBAC · Firebase Auth · Full CI/CD pipeline · Zero duplicate bookings",
+      live: "https://cabo-two.vercel.app",
+      github: "https://github.com/KDGIT005/CABO",
     },
     {
       icon: "🏥",
       title: "HealthSenseAI",
-      badge: "Android",
-      tech: ["Kotlin", "MVVM", "Python Flask", "Scikit-learn", "Gemini API", "Firebase"],
-      desc: "Android health monitoring app generating 6+ biometric parameters every 10 seconds. Cloud-hosted ML API classifies users into 3 risk levels via a 4-layer pipeline: Sensor → ML → Gemini → UI.",
-      wins: "~70% reduction in manual input · 3-level ML risk classification · Retrofit REST",
+      badge: "Android · Dual-Stack",
+      tech: ["Kotlin", "Material 3", "MVVM", "Android Studio", "Python", "Flask", "scikit-learn", "Gemini API"],
+      desc: "AI-powered disease prediction Android app built with Kotlin and Material 3. Complete MVVM architecture with onboarding, dashboard, health insights with charts, predictions, and profile. Dual-stack project: Android frontend + Python ML backend (Flask + scikit-learn + Gemini API) for disease prediction from smartwatch sensor data.",
+      wins: "Full MVVM architecture · Material 3 UI · Python ML backend · Designed for Google Fit + TensorFlow Lite integration",
+      github: "https://github.com/KDGIT005/HealthSense-AI",
+    },
+    {
+      icon: "🕉️",
+      title: "MahaSahayak AI",
+      badge: "↗ Live · Hackathon",
+      tech: ["Next.js 16", "TypeScript", "Tailwind CSS v4", "Gemini 3.5 Flash", "Recharts"],
+      desc: "AI-powered volunteer deployment platform for Mahakumbh 2028 — manages 50,000+ volunteers across 10+ zones. Features smart assignment, emergency response in <3s, burnout prevention, and bilingual (Hindi/English) dashboard with the original Bharat Ready Score™ metric.",
+      wins: "4 Gemini AI endpoints · Bharat Ready Score™ · Real-time zone heatmap · Hackathon qualifier (Round 2)",
+      live: "https://maha-sahayak-ai.vercel.app",
+      github: "https://github.com/KDGIT005/MahaSahayak-AI",
+    },
+    {
+      icon: "🧠",
+      title: "PostureSense",
+      badge: "AI/ML · Desktop",
+      tech: ["Python", "MediaPipe", "scikit-learn", "OpenCV", "NumPy", "SciPy", "pygame"],
+      desc: "Webcam-based AI posture monitor using Random Forest classifier on 12 biomechanical features from 33 body landmarks. One-Class SVM for personal calibration, specific per-issue coaching (neck, shoulders, torso, spine), streak tracking, and fatigue detection. 100% local — no video leaves the machine.",
+      wins: "12-feature biomechanical analysis · Personal calibration via One-Class SVM · Privacy-first local processing",
+      github: "https://github.com/KDGIT005/PostureSense",
+    },
+    {
+      icon: "🌱",
+      title: "Carbon Fossil Assessment",
+      badge: "Climate Tech",
+      tech: ["JavaScript", "HTML/CSS", "Node.js", "Express.js", "MySQL", "MongoDB"],
+      desc: "Web application quantifying the carbon footprint of Indian coal mines with data-driven insights toward carbon neutrality. Features a calculator, emission charts, geo-location mapping, and actionable sustainability recommendations for government agencies and mine operators.",
+      wins: "Mine-specific carbon calculator · Geo-location mapping · Sustainability recommendations",
+      github: "https://github.com/KDGIT005/Carbon-Fossil-Assessment-System",
+    },
+    {
+      icon: "🗑️",
+      title: "YT Watch Later Cleaner",
+      badge: "Chrome Extension",
+      tech: ["JavaScript", "HTML", "Chrome Extensions API"],
+      desc: "Minimal Chrome Extension that automates bulk removal of videos from YouTube's Watch Later playlist. One-click start, built-in smart delays to avoid YouTube rate limiting, and zero background processes — runs only on demand.",
+      wins: "One-click bulk delete · Smart rate-limit avoidance · Lightweight on-demand execution",
+      github: "https://github.com/KDGIT005/YouTube-Watch-Later-Cleaner",
     },
   ];
   return (
     <section id="projects" className="max-w-6xl mx-auto px-6 py-24">
-      <SectionHeader num="03" title="Featured Projects" kicker="Selected Work" />
+      <SectionHeader num="01" title="Featured Projects" kicker="Selected Work" />
       <div className="grid md:grid-cols-2 gap-6">
         {projects.map((p, i) => <ProjectCard key={p.title} p={p} i={i} />)}
       </div>
@@ -377,78 +521,341 @@ function Projects() {
   );
 }
 
-function Experience() {
-  const bullets = [
-    "Built AI-powered health monitoring features using OpenAI APIs and cloud-based backend services",
-    "Developed REST APIs in Spring Boot for AI-driven symptom analysis and recommendations",
-    "Integrated real-time biometric simulation into a 4-layer ML inference pipeline",
-    "Reduced manual health-report generation time by 70% via response automation",
-  ];
+// ── Experience & Achievements Section ──────────────────────────────
+
+type Achievement = {
+  icon: string;
+  title: string;
+  organization: string;
+  type: string;
+  date: string;
+  badges?: string[];
+  bullets: string[];
+  tags: string[];
+};
+
+const achievements: Achievement[] = [
+  {
+    icon: "🏆",
+    title: "Hackathon Winner",
+    organization: "Expert Hire × VIT Bhopal · Mahakumbh Innovation Challenge",
+    type: "Competition",
+    date: "2025",
+    badges: ["Winner"],
+    bullets: [
+      "Won the Mahakumbh Innovation Hackathon organized by Expert Hire × VIT Bhopal",
+      "Built MahaSahayak AI — a real-time AI volunteer deployment platform for Mahakumbh 2028 powered by Google Gemini 3.5 Flash",
+      "Shipped a full Next.js + TypeScript + Tailwind app with 4 live AI API endpoints (assign, emergency, balance, natural language search) within the hackathon window",
+      "Invented the Bharat Ready Score™ — an original composite volunteer readiness metric",
+      "Deployed live on Vercel: maha-sahayak-ai.vercel.app",
+    ],
+    tags: ["Next.js", "Gemini AI", "TypeScript", "Hackathon", "Live Deployment"],
+  },
+  {
+    icon: "☁️",
+    title: "AWS Certified — Dual Certification",
+    organization: "Amazon Web Services",
+    type: "Certification Achievement",
+    date: "June 2026",
+    badges: ["2× Certified", "992/1000"],
+    bullets: [
+      "AWS Certified Solutions Architect – Associate (SAA-C03) — Score: 992/1000 (near-perfect; top percentile)",
+      "AWS Certified Cloud Practitioner (CLF-C02) — Score: 865/1000",
+      "Domains covered: Secure Architecture Design, Resilient & High-Performing Systems, Cost-Optimized Cloud Infrastructure, Security & Compliance",
+      "Both certifications valid through June 2029",
+    ],
+    tags: ["AWS", "Cloud", "SAA-C03", "CLF-C02", "Architecture"],
+  },
+  {
+    icon: "🖥️",
+    title: "Virtual Internship Program",
+    organization: "ServiceNow University × AICTE × SmartBridge",
+    type: "Internship",
+    date: "May 2026",
+    badges: ["Completed"],
+    bullets: [
+      "Completed structured training across 8 modules: ServiceNow Admin Fundamentals, Agentic AI Introduction, Automated Test Framework (ATF), Flows, Reports & CSA Prep",
+      "Earned official Certificate ID: SNU2024599 issued jointly by ServiceNow, AICTE (Ministry of Education), and SmartBridge",
+      "Gained hands-on exposure to enterprise ITSM workflows and low-code automation",
+      "Prepared for Certified System Administrator (CSA) examination pathway",
+    ],
+    tags: ["ServiceNow", "ITSM", "Agentic AI", "AICTE", "Enterprise Tech"],
+  },
+  {
+    icon: "📊",
+    title: "McKinsey.org Forward Program",
+    organization: "McKinsey.org",
+    type: "Leadership & Business Program",
+    date: "December 2025",
+    badges: ["Completed"],
+    bullets: [
+      "Completed the selective McKinsey.org Forward online learning program",
+      "Developed structured problem-solving skills using the McKinsey approach",
+      "Trained in effective communication, adaptability, and resilience mindsets",
+      "Built a foundational digital toolkit for navigating the future of work",
+    ],
+    tags: ["Leadership", "Problem Solving", "McKinsey", "Strategy"],
+  },
+  {
+    icon: "⚡",
+    title: "Active Member — IEEE VIT Bhopal Student Branch",
+    organization: "IEEE VIT Bhopal",
+    type: "Technical Club",
+    date: "2023 – Present",
+    bullets: [
+      "Active member of one of India's largest student IEEE branches",
+      "Contributed to technical events, workshops, and student community initiatives",
+      "Collaborated with fellow developers on tech-driven campus projects",
+      "Part of a network connecting students to global engineering and tech opportunities",
+    ],
+    tags: ["IEEE", "Technical Community", "Leadership", "Networking"],
+  },
+  {
+    icon: "🎭",
+    title: "Club Member & Event Contributor",
+    organization: "Rajasthani Club · Northeast Club · VIT Bhopal",
+    type: "Cultural & Student Activities",
+    date: "2023 – Present",
+    bullets: [
+      "Active member of Rajasthani Club and Northeast Club at VIT Bhopal",
+      "Handled multiple roles across clubs: Event Management, Photography, Public Relations",
+      "Organized and coordinated cultural events representing regional diversity on campus",
+      "Built cross-cultural collaboration and leadership skills outside the classroom",
+    ],
+    tags: ["Event Management", "Photography", "PR", "Leadership", "Culture"],
+  },
+];
+
+export function Experience() {
   return (
     <section id="experience" className="max-w-6xl mx-auto px-6 py-24">
-      <SectionHeader num="04" title="Experience" kicker="Where I've Worked" />
-      <motion.div
-        variants={sectionFade}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        className="relative glass rounded-3xl p-8 pl-10 card-hover"
-      >
-        <div className="absolute left-0 top-8 bottom-8 w-1 rounded-r gradient-bg-primary" />
-        <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
-          <div>
-            <h3 className="font-display text-2xl font-bold">AI Backend Developer Intern</h3>
-            <p className="text-foreground/60 mt-1">Self-Initiated / Freelance · Remote</p>
-          </div>
-          <span className="font-mono text-xs px-3 py-1.5 rounded-full glass text-accent">
-            Jan 2026 – Present
-          </span>
-        </div>
-        <ul className="space-y-3">
-          {bullets.map((b, i) => (
-            <li key={i} className="flex gap-3 text-foreground/85">
-              <span className="text-accent font-mono mt-0.5">→</span>
-              <span>{b}</span>
-            </li>
-          ))}
-        </ul>
-      </motion.div>
-    </section>
-  );
-}
-
-function Certifications() {
-  const certs = [
-    { icon: "☁️", title: "AWS Cloud Practitioner Essentials", org: "Amazon Web Services", date: "May 2025", desc: "Foundational AWS Cloud services, architecture, pricing, and the shared responsibility model." },
-    { icon: "⚙️", title: "DevOps Fundamentals", org: "IBM Career Education", date: "Jun 2025", desc: "CI/CD pipelines, Docker containerization, infrastructure as code, agile DevOps practices." },
-    { icon: "📊", title: "McKinsey Forward Program", org: "McKinsey.org", date: "Dec 2025", desc: "Structured problem-solving — hypothesis-driven thinking and data-driven decision-making." },
-  ];
-  return (
-    <section className="max-w-6xl mx-auto px-6 py-24">
-      <SectionHeader num="05" title="Certifications" kicker="Always Learning" />
-      <div className="grid md:grid-cols-3 gap-5">
-        {certs.map((c, i) => (
-          <motion.div
-            key={c.title}
+      <SectionHeader num="01" title="Experience & Achievements" kicker="What I've Done" />
+      <div className="grid lg:grid-cols-2 gap-6">
+        {achievements.map((item, i) => (
+          <motion.article
+            key={item.title}
             custom={i}
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
-            className="glass rounded-3xl p-6 card-hover"
+            className="relative glass rounded-3xl p-6 md:p-8 pl-8 md:pl-10 card-hover overflow-hidden"
           >
-            <div className="text-3xl mb-3">{c.icon}</div>
-            <h3 className="font-display text-lg font-bold leading-snug">{c.title}</h3>
-            <p className="font-mono text-xs text-foreground/60 mt-2">{c.org} · {c.date}</p>
-            <p className="mt-4 text-sm text-foreground/75 leading-relaxed">{c.desc}</p>
-          </motion.div>
+            <div className="absolute left-0 top-8 bottom-8 w-1 rounded-r gradient-bg-primary" />
+            <div className="flex flex-wrap items-start justify-between gap-4 mb-5">
+              <div className="min-w-0">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl" aria-hidden>
+                    {item.icon}
+                  </span>
+                  <span className="font-mono text-xs px-3 py-1 rounded-full glass text-accent">
+                    {item.type}
+                  </span>
+                </div>
+                <h3 className="font-display text-xl md:text-2xl font-bold leading-tight">{item.title}</h3>
+                <p className="text-foreground/60 mt-2 text-sm leading-relaxed">{item.organization}</p>
+              </div>
+              <div className="flex flex-col items-start sm:items-end gap-2">
+                <span className="font-mono text-xs px-3 py-1.5 rounded-full glass text-foreground/75">
+                  {item.date}
+                </span>
+                {item.badges?.map((badge) => (
+                  <span
+                    key={badge}
+                    className="font-mono text-xs px-3 py-1 rounded-full gradient-bg-primary text-primary-foreground font-semibold"
+                  >
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <ul className="space-y-3">
+              {item.bullets.map((bullet) => (
+                <li key={bullet} className="flex gap-3 text-sm leading-relaxed text-foreground/85">
+                  <span className="text-accent font-mono mt-0.5 shrink-0">→</span>
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {item.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="font-mono text-[11px] px-2.5 py-1 rounded-full border border-accent/30 bg-accent/5 text-foreground/80"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </motion.article>
         ))}
       </div>
     </section>
   );
 }
 
-function Contact() {
+// ── Certifications Section ──────────────────────────────────────────
+
+type Cert = {
+  icon: string;
+  title: string;
+  org: string;
+  date: string;
+  desc: string;
+  score?: string;
+  credly?: string;
+  verify?: string;
+};
+
+function CertCard({ c, i }: { c: Cert; i: number }) {
+  return (
+    <motion.div
+      key={c.title}
+      custom={i}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      className="glass rounded-3xl p-6 card-hover flex flex-col"
+    >
+      <div className="flex items-start justify-between mb-3">
+        <div className="text-3xl">{c.icon}</div>
+        {c.score && (
+          <span className="font-mono text-xs px-3 py-1 rounded-full gradient-bg-primary text-primary-foreground font-bold">
+            {c.score}
+          </span>
+        )}
+      </div>
+      <h3 className="font-display text-lg font-bold leading-snug">{c.title}</h3>
+      <p className="font-mono text-xs text-foreground/60 mt-2">{c.org} · {c.date}</p>
+      <p className="mt-4 text-sm text-foreground/75 leading-relaxed flex-1">{c.desc}</p>
+      {(c.credly || c.verify) && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {c.credly && (
+            <a
+              href={c.credly}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-xs text-accent hover:border-accent transition-all"
+            >
+              🏅 Credly Badge
+            </a>
+          )}
+          {c.verify && (
+            <a
+              href={c.verify}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full glass text-xs text-foreground/60 hover:text-foreground transition-all"
+            >
+              🔗 Verify
+            </a>
+          )}
+        </div>
+      )}
+    </motion.div>
+  );
+}
+
+export function Certifications() {
+  const featured: Cert[] = [
+    {
+      icon: "⭐",
+      title: "AWS Solutions Architect – Associate",
+      org: "Amazon Web Services",
+      date: "Jun 2026",
+      desc: "Designing distributed systems on AWS — compute, storage, networking, security, and cost optimization. Exam SAA-C03.",
+      score: "992 / 1000",
+      credly: "https://www.credly.com/badges/e0d44a84-31f9-4d94-a6d0-532134f82fa9/public_url",
+      verify: "https://aws.amazon.com/verification",
+    },
+    {
+      icon: "☁️",
+      title: "AWS Certified Cloud Practitioner",
+      org: "Amazon Web Services",
+      date: "Jun 2026",
+      desc: "Foundational AWS Cloud services, architecture, pricing, shared responsibility model, and cloud economics. Exam CLF-C02.",
+      score: "865 / 1000",
+      credly: "https://www.credly.com/badges/0d7be21b-c25a-457f-b1f8-607a44aa32ae/public_url",
+      verify: "https://aws.amazon.com/verification",
+    },
+    {
+      icon: "🔷",
+      title: "Azure Data Fundamentals (DP-900)",
+      org: "Microsoft",
+      date: "Jun 2025",
+      desc: "Core data concepts, relational and non-relational data on Azure, and analytics workloads.",
+      credly: "https://www.credly.com/badges/2c974e8f-7b77-4f67-8f19-050b4b63ab87/public_url",
+      verify: "https://verify.certiport.com",
+    },
+    {
+      icon: "📊",
+      title: "McKinsey Forward Program",
+      org: "McKinsey.org",
+      date: "Dec 2025",
+      desc: "Problem-solving using the McKinsey approach, communication, adaptability & resilience mindsets, digital toolkit fundamentals.",
+      credly: "https://www.credly.com/badges/0e89f80e-3b40-464b-bd12-b30eeaa9d837/public_url",
+    },
+  ];
+
+  const more: Cert[] = [
+    {
+      icon: "🔧",
+      title: "ServiceNow Virtual Internship",
+      org: "ServiceNow × AICTE × SmartBridge",
+      date: "May 2026",
+      desc: "ServiceNow Admin, Agentic AI, Flows, ATF Essentials, Reports, and CSA exam prep. Certificate ID: SNU2024599.",
+    },
+    {
+      icon: "⚙️",
+      title: "IBM DevOps Fundamentals",
+      org: "IBM Career Education (IBMCE)",
+      date: "Jun 2025",
+      desc: "CI/CD pipelines, Docker containerization, infrastructure as code, agile DevOps practices.",
+      verify: "https://courses.vit.skillsnetwork.site/certificates/1acd8cb350a048eeb194098a11362b1a",
+    },
+    {
+      icon: "⚙️",
+      title: "IBM DevOps, Agile & Design Thinking",
+      org: "IBM Career Education (IBMCE)",
+      date: "Jun 2025",
+      desc: "Agile methodologies, design thinking frameworks, and DevOps culture integration.",
+      verify: "https://courses.vit.skillsnetwork.site/certificates/021d86ae4780472e8e506eca922aa6b7",
+    },
+    {
+      icon: "🌐",
+      title: "Bits and Bytes of Computer Networking",
+      org: "Google (Coursera)",
+      date: "Dec 2025",
+      desc: "Networking fundamentals — TCP/IP, DNS, DHCP, network troubleshooting, and cloud networking.",
+      verify: "https://coursera.org/verify/NN8N8552RMXC",
+    },
+  ];
+
+  return (
+    <section className="max-w-6xl mx-auto px-6 py-24">
+      <SectionHeader num="01" title="Certifications" kicker="Always Learning" />
+
+      {/* Top 4 */}
+      <div className="grid md:grid-cols-2 gap-5">
+        {featured.map((c, i) => (
+          <CertCard key={c.title} c={c} i={i} />
+        ))}
+      </div>
+
+      {/* Remaining 5 */}
+      <div className="grid md:grid-cols-3 gap-5 mt-6">
+        {more.map((c, i) => (
+          <CertCard key={c.title} c={c} i={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ── Contact Section ─────────────────────────────────────────────────
+
+export function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
@@ -479,7 +886,7 @@ function Contact() {
   const contacts = [
     { icon: <Mail size={16} />, label: "kuldeepdhangad@gmail.com", href: "mailto:kuldeepdhangad@gmail.com" },
     { icon: <Phone size={16} />, label: "+91-9664289100", href: "tel:+919664289100" },
-    { icon: <Linkedin size={16} />, label: "linkedin.com/in/kuldeep-dhangad", href: "https://linkedin.com/in/kuldeep-dhangad" },
+    { icon: <Linkedin size={16} />, label: "linkedin.com/in/kuldeepdhangad", href: "https://www.linkedin.com/in/kuldeepdhangad/" },
     { icon: <Github size={16} />, label: "github.com/KDGIT005", href: "https://github.com/KDGIT005" },
     { icon: <Code2 size={16} />, label: "leetcode.com/u/KULDEEP2005", href: "https://leetcode.com/u/KULDEEP2005" },
   ];
@@ -499,7 +906,7 @@ function Contact() {
           style={{ background: "var(--gradient-primary)" }}
         />
         <div className="text-center">
-          <div className="font-mono text-xs tracking-[0.3em] uppercase text-accent mb-3">06 — Contact</div>
+          <div className="font-mono text-xs tracking-[0.3em] uppercase text-accent mb-3">03 — Contact</div>
           <h2 className="font-display font-bold text-4xl md:text-6xl tracking-tight">
             Let's <span className="gradient-text">build something</span> remarkable.
           </h2>
@@ -588,55 +995,5 @@ function Contact() {
         </div>
       </motion.div>
     </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer className="border-t border-border mt-12">
-      <div className="max-w-6xl mx-auto px-6 py-8 flex flex-wrap items-center justify-between gap-3 font-mono text-xs text-foreground/60">
-        <span>Built by Kuldeep Dhangad · 2026</span>
-        <span className="gradient-text">React · TanStack Start · Deployed on Cloudflare</span>
-      </div>
-    </footer>
-  );
-}
-
-export default function Portfolio() {
-  const [booted, setBooted] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const seen = sessionStorage.getItem("kd_booted");
-    if (seen) setBooted(true);
-  }, []);
-
-  const finish = () => {
-    sessionStorage.setItem("kd_booted", "1");
-    setBooted(true);
-  };
-
-  return (
-    <>
-      <CursorTrail />
-      <AnimatePresence>{!booted && <BootIntro key="intro" onFinish={finish} />}</AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: booted ? 1 : 0, y: booted ? 0 : 16 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="min-h-screen text-foreground"
-      >
-        <Navbar />
-        <Hero />
-        <Ticker />
-        <About />
-        <Skills />
-        <Projects />
-        <Experience />
-        <Certifications />
-        <Contact />
-        <Footer />
-      </motion.div>
-    </>
   );
 }
