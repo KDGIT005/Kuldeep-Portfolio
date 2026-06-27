@@ -57,7 +57,7 @@ export default function Navbar() {
           to="/#contact"
           className="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full gradient-bg-primary text-primary-foreground text-sm font-semibold glow-purple hover:scale-105 transition-transform"
         >
-          Let's Talk
+          Hire Me
         </Link>
         <button
           className="md:hidden flex items-center justify-center w-9 h-9 rounded-full glass text-foreground/80 hover:text-foreground transition-colors"
@@ -111,7 +111,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="block mt-2 text-center px-4 py-2.5 rounded-full gradient-bg-primary text-primary-foreground text-sm font-semibold"
                 >
-                  Let's Talk
+                  Hire Me
                 </Link>
               </li>
             </ul>

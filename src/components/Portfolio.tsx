@@ -64,9 +64,9 @@ export function SocialRail() {
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.4, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute left-4 top-28 bottom-24 z-30 hidden xl:block pointer-events-none"
+      className="absolute left-10 top-28 bottom-24 z-30 hidden xl:block pointer-events-none"
     >
-      <div className="sticky top-28 flex flex-col items-center gap-3 pointer-events-auto">
+      <div className="sticky top-28 flex flex-col items-center gap-5 pointer-events-auto">
         <div className="h-10 w-px bg-gradient-to-b from-transparent to-accent/30" />
         {links.map((link) => (
           <a
@@ -163,10 +163,11 @@ export function Hero() {
           </Link>
           <a
             href="/resume.pdf"
-            download
+            target="_blank"
+            rel="noreferrer"
             className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full glass text-foreground hover:border-accent transition-all"
           >
-            <Download size={16} /> Download Resume
+            <ExternalLink size={16} /> View Resume
           </a>
         </motion.div>
 
@@ -865,14 +866,17 @@ export function Contact() {
 
     setStatus("sending");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "05ac6b49-aa01-4ffe-b669-bc776b13ff53",
+          ...formData,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error((data as { error?: string }).error || "Failed to send message");
+        throw new Error((data as { message?: string }).message || "Failed to send message");
       }
       setStatus("sent");
       setFormData({ name: "", email: "", message: "" });
