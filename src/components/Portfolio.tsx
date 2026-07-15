@@ -257,8 +257,8 @@ export function About() {
             <li>📍 VIT Bhopal, India</li>
             <li>🎓 B.Tech CS · Cloud Computing & Automation (2027)</li>
             <li>☁️ 2× AWS Certified (SAA + CCP)</li>
-            <li>⚡ Full-Stack · AI Backends · Android</li>
-            <li>🏆 Hackathon Builder — Mahakumbh Innovation Challenge</li>
+            <li>⚡ Full-Stack · AI Backends · Cloud</li>
+            <li>🏆 Hackathon Winner — Mahakumbh Innovation Challenge</li>
             <li className="pt-2 text-accent">🚀 Open to internships & SDE fresher roles</li>
           </ul>
         </motion.div>
@@ -320,7 +320,7 @@ export function NavigationCards() {
           >
             <Link
               to={card.to}
-              className="group relative block glass rounded-3xl p-8 card-hover overflow-hidden"
+              className="group relative block glass rounded-3xl p-8 card-hover overflow-hidden h-full"
             >
               {/* Background glow */}
               <div

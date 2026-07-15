@@ -13,7 +13,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import appCss from "../styles.css?url";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CursorTrail from "@/components/CursorTrail";
+
 import BootIntro from "@/components/BootIntro";
 
 function NotFoundComponent() {
@@ -132,7 +132,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CursorTrail />
+
       <AnimatePresence>{!booted && <BootIntro key="intro" onFinish={finish} />}</AnimatePresence>
       <motion.div
         initial={{ opacity: 0, y: 16 }}
